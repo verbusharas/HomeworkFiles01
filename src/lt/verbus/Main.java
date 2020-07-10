@@ -9,6 +9,8 @@ public class Main {
         Map<Integer, Person> people = new ImportService().importPeople("src/databases/people.txt");
         Map<Integer, Payment> transactions = new ImportService().importPayments("src/databases/payment.txt");
         people = updateBalances(people, transactions);
+        new ExportService().exportReceivers(people, "src/databases/receivers.txt");
+        new ExportService().exportSenders(people, "src/databases/senders.txt");
 
     }
 
