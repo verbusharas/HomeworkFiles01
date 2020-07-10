@@ -20,10 +20,11 @@ public class ImportService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.println("List of registered people imported successfully. No of entries: " + people.size());
         return people;
     }
 
-    public HashMap<Integer, Payment> importPayments(String pathToFile) {
+    public Map<Integer, Payment> importPayments(String pathToFile) {
         Map<Integer, Payment> transactions = new HashMap<>();
         try (BufferedReader paymentReader = Files.newBufferedReader(Paths.get(pathToFile))) {
             String line;
@@ -31,11 +32,12 @@ public class ImportService {
             while ((line = paymentReader.readLine()) != null) {
                 String[] argumentsInLine = line.split(", ");
                 transactions.put(Integer.valueOf(argumentsInLine[0]),
-                        new Payment(Integer.valueOf(argumentsInLine[0]), Double.valueOf(argumentsInLine[1]), Integer.valueOf(argumentsInLine[2]), Integer.valueOf(argumentsInLine[3])));
+                        new Payment(Integer.valueOf(argumentsInLine[0]), Double.valueOf(argumentsInLine[1]), Integer.valueOf(argumentsInLine[2]), Integer.valueOf(argumentsInLine[3].trim())));
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return null;
+        System.out.println("List of completed transactions imported successfully. No of entries: " + transactions.size());
+        return transactions;
     }
 }
