@@ -1,23 +1,26 @@
 package lt.verbus;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.HashMap;
 import java.util.Map;
 
 public class Main {
 
-    public static void main(String[] args) {
-        Map<Integer, Person> people = new HashMap<>();
-        try (BufferedReader reader = Files.newBufferedReader(Paths.get("src/databases/people.txt"))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                System.out.println(line);
+    public static void main(String[] args) throws IOException {
+        Map<Integer, Person> people = new ImportService().importPeople("src/databases/people.txt");
+        Map<Integer, Payment> transactions = new ImportService().importPayments("src/databases/payment.txt");
+        people = updateBalances(people, transactions);
+
+    }
+
+    public static Map<Integer, Person> updateBalances(Map<Integer, Person> people, Map<Integer, Payment> transactions) {
+        for (Map.Entry entry : transactions.entrySet()) {
+            int senderID = ((Payment) entry.getValue()).getSender();
+            int receiverID = ((Payment) entry.getValue()).getReceiver();
+            if (people.containsKey(senderID) && people.containsKey(receiverID)) {
+                people.get(senderID).transactionOut(((Payment) entry.getValue()).getAmount());
+                people.get(receiverID).transactionIn(((Payment) entry.getValue()).getAmount());
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
+        return people;
     }
 }
