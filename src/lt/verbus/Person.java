@@ -1,11 +1,11 @@
 package lt.verbus;
 
 public class Person {
-    int id;
-    String name;
-    String surname;
-    double receivedMoney;
-    double sentMoney;
+    private int id;
+    private String name;
+    private String surname;
+    private double receivedMoney;
+    private double sentMoney;
 
     public Person(int id, String name, String surname) {
         this.id = id;
@@ -23,8 +23,17 @@ public class Person {
         this.sentMoney = sentMoney + amount;
     }
 
+    public double getReceivedMoney() {
+        return receivedMoney;
+    }
+
+    public double getSentMoney() {
+        return sentMoney;
+    }
+
     @Override
     public String toString() {
-        return String.format("%d | %s %s", id, name, surname);
+        return String.format("%d | %20s|   Money received: %.2f   Money sent %.2f", id, (name + " " + surname), receivedMoney, sentMoney);
     }
+
 }
